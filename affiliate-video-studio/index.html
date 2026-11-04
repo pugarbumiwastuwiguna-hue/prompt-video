@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Video Studio</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#D61F52">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F4F5F9;color:#12141C;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1160px;margin:0 auto;padding:32px 24px;display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+h1{margin:0;font-size:32px;font-weight:800;letter-spacing:-.02em}
+h2{margin:0;font-size:20px;font-weight:800}
+.sub{margin:4px 0 0;font-size:16px;color:#4F5468}
+.badge{background:#12141C;color:#fff;font-size:14px;font-weight:700;padding:8px 14px;border-radius:999px}
+.cols{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.card{background:#fff;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.left{flex:1 1 380px;gap:20px}.right{flex:1.4 1 460px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:180px;border:2px dashed #9AA0B4;border-radius:16px;background:#F8F9FC;cursor:pointer;overflow:hidden;text-align:center;padding:16px}
+.drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.drop img{max-width:100%;max-height:220px;object-fit:contain;border-radius:12px}
+.muted{font-size:14px;color:#4F5468}
+.f{display:flex;flex-direction:column;gap:6px}.f label,.lbl{font-size:14px;font-weight:700}
+.f input{height:48px;border:1.5px solid #B8BDCE;border-radius:12px;padding:0 14px;font:inherit;font-size:16px;width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;cursor:pointer}
+.pill{height:44px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:700;border:1.5px solid #12141C;background:#fff;color:#12141C}
+.pill[aria-pressed=true]{background:#12141C;color:#fff}
+.go{height:52px;border:0;border-radius:14px;background:#D61F52;color:#fff;font-size:16px;font-weight:800}
+.go:disabled{opacity:.45;cursor:not-allowed}
+.hook{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:14px;border:2px solid #E1E4EE;background:#fff}
+.hook.on{border-color:#D61F52;background:#FFF5F8}
+.hook p{margin:0;font-size:18px;font-weight:700;line-height:1.4}
+.b1{height:44px;padding:0 16px;border-radius:12px;border:0;font-size:14px;font-weight:700;background:#12141C;color:#fff}
+.hook.on .b1{background:#D61F52}
+.b2{height:44px;padding:0 16px;border-radius:12px;border:1.5px solid #12141C;background:#fff;color:#12141C;font-size:14px;font-weight:700}
+.dark{background:#12141C;color:#fff}.dark .muted{color:#C9CDDB}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.cp{height:44px;padding:0 18px;border-radius:12px;border:0;background:#fff;color:#12141C;font-size:14px;font-weight:800}
+pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.6;background:#1E2130;border-radius:12px;padding:16px;color:#F1F2F8}
+.hide{display:none}
+button:focus-visible,input:focus-visible,.drop:focus-within{outline:3px solid #12141C;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div><h1>Affiliate Video Studio</h1><p class="sub">Foto produk jadi hook dan prompt video siap tempel di Google Flow.</p></div><span class="badge">Format 9:16 untuk TikTok</span></header>
+<div class="cols">
+<section class="card left">
+<h2>1. Data produk</h2>
+<label class="drop"><input id="file" type="file" accept="image/*"><img id="pv" class="hide" alt="Foto produk"><b id="dt">Upload foto produk</b><span class="muted" id="ds">JPG, PNG, atau WebP</span></label>
+<div class="f"><label for="nama">Nama produk</label><input id="nama" type="text" placeholder="Contoh: Serum Vitamin C 30 ml"></div>
+<div class="f"><label for="harga">Harga</label><input id="harga" type="text" inputmode="numeric" placeholder="Rp 89.000"></div>
+<div class="f"><label for="plus">Keunggulan utama (opsional)</label><input id="plus" type="text" placeholder="Contoh: cepat meresap, tidak lengket"></div>
+<div class="f"><span class="lbl">Gaya hook</span><div class="row" id="styles"></div></div>
+<button class="go" id="go" disabled>Buat hook dengan AI</button>
+</section>
+<section class="right">
+<div class="card"><h2>2. Hook promosi</h2>
+<p class="muted" id="empty" style="font-size:16px">Isi nama produk lalu tekan tombol buat hook. Tiga pilihan hook akan muncul di sini.</p>
+<p class="muted" id="note"></p><div id="hooks" style="display:flex;flex-direction:column;gap:16px"></div></div>
+<div class="card dark"><div class="top"><h2>3. Prompt untuk Google Flow</h2><button class="cp" id="cp">Salin prompt</button></div>
+<p class="muted" id="pe" style="font-size:16px">Prompt akan dibuat otomatis setelah kamu memilih hook.</p>
+<pre id="prompt" class="hide"></pre><p class="muted" id="pn">Tempel prompt ini di Google Flow, lalu tambahkan foto produk sebagai gambar referensi.</p></div>
+</section></div></div>
+<script>
+const STYLES=[
+{id:'soft',label:'Soft sell',tone:'santai seperti rekomendasi teman',scene:'Scene 1 (0-3s): creator holds the product close to the camera in a bright cozy room, genuine smile.\nScene 2 (3-9s): natural hands-on demo that shows the key detail of the product.\nScene 3 (9-15s): everyday lifestyle moment, ending on a soft-lit hero shot of the product.'},
+{id:'problem',label:'Masalah ke solusi',tone:'mengangkat masalah sehari-hari lalu solusinya',scene:'Scene 1 (0-3s): creator shows a small everyday frustration, relatable expression.\nScene 2 (3-9s): the product enters the frame, quick hands-on demo, visible relief.\nScene 3 (9-15s): clean before/after feeling, ending on a product hero shot.'},
+{id:'urgent',label:'Urgensi promo',tone:'cepat, bertenaga, mendorong segera beli',scene:'Scene 1 (0-3s): fast punchy product reveal with a quick cut and energetic motion.\nScene 2 (3-9s): rapid close-ups of the product details, snappy transitions.\nScene 3 (9-15s): creator points down toward the bottom of the screen, product hero shot.'},
+{id:'review',label:'Review jujur',tone:'jujur, meyakinkan, seperti review pembeli',scene:'Scene 1 (0-3s): creator talks to the camera holding the product, honest expression.\nScene 2 (3-9s): close-up inspection of material and details, hands turning the product.\nScene 3 (9-15s): creator nods approvingly, ending on a product hero shot.'}];
+const S={style:'soft',hooks:[],picked:0,loading:false,copied:''};
+const $=id=>document.getElementById(id);
+const digits=()=>$('harga').value.replace(/\D/g,'');
+const priceText=()=>{const d=digits();return d?'Rp '+d.replace(/\B(?=(\d{3})+(?!\d))/g,'.'):''};
+const st=()=>STYLES.find(x=>x.id===S.style);
+function fallback(){const n=$('nama').value.trim(),p=priceText(),b=$('plus').value.trim(),pr=p?' cuma '+p:'';
+return {soft:['Jujur, '+n+' ini bikin hariku jauh lebih gampang'+(b?': '+b:'')+'.','Kalau kamu lagi cari '+n+', coba lihat ini dulu.',n+pr+', dan aku langsung jatuh cinta.'],
+problem:['Capek sama masalah yang itu-itu terus? '+n+' jawabannya.','Dulu aku bingung, sampai ketemu '+n+'.','Satu produk, masalah beres: '+n+'.'],
+urgent:['Stop scroll! '+n+pr+', jangan sampai kehabisan.','Promo ini nggak lama, '+n+' wajib masuk keranjang.','Buruan cek keranjang kuning, '+n+' lagi murah.'],
+review:['Aku coba '+n+' sendiri, ini hasil jujurnya.','Review jujur '+n+(b?': '+b:'')+', worth it nggak?','Sebelum beli '+n+', tonton ini dulu.']}[S.style]}
+function build(h){const n=$('nama').value.trim()||'the product',p=priceText(),b=$('plus').value.trim(),s=st();
+return 'Vertical 9:16 UGC-style TikTok product video, 15 seconds, handheld smartphone look, natural lighting, sharp focus on the product.\n\nProduct: '+n+(p?' (price '+p+')':'')+(b?'. Key benefit: '+b:'')+'.\nUse the uploaded product photo as the reference image and keep its exact shape, color, and packaging.\n\n'+s.scene+'\n\nOn-screen text at the start: "'+h+'"\nVoiceover (Bahasa Indonesia, '+s.tone+'): "'+h+'"\n\nAvoid: fake logos, extra text on the packaging, distorted hands, exaggerated or medical claims.'}
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function flash(k,btn,label){S.copied=k;btn.textContent='Tersalin';setTimeout(()=>{btn.textContent=label},1600)}
+function copy(t){try{navigator.clipboard.writeText(t)}catch(e){}}
+function render(){
+const sb=$('styles');sb.textContent='';
+STYLES.forEach(x=>{const b=el('button','pill',x.label);b.type='button';b.setAttribute('aria-pressed',String(x.id===S.style));b.onclick=()=>{S.style=x.id;render()};sb.appendChild(b)});
+const g=$('go');g.disabled=!$('nama').value.trim()||S.loading;g.textContent=S.loading?'Membuat hook...':(S.hooks.length?'Buat ulang hook':'Buat hook dengan AI');
+const has=S.hooks.length>0;$('empty').classList.toggle('hide',has);$('pe').classList.toggle('hide',has);
+$('prompt').classList.toggle('hide',!has);$('pn').classList.toggle('hide',!has);
+const hs=$('hooks');hs.textContent='';
+S.hooks.forEach((t,i)=>{const on=i===S.picked,c=el('div','hook'+(on?' on':'')),r=el('div','row');
+const a=el('button','b1',on?'Hook dipakai':'Pakai hook ini');a.type='button';a.onclick=()=>{S.picked=i;render()};
+const k=el('button','b2','Salin');k.type='button';k.onclick=()=>{copy(t);flash('h'+i,k,'Salin')};
+r.append(a,k);c.append(el('p','',t),r);hs.appendChild(c)});
+if(has)$('prompt').textContent=build(S.hooks[S.picked]);}
+async function generate(){
+S.loading=true;$('note').textContent='';render();let hooks=null,note='';
+try{const s=st(),r=await fetch('/api/hook',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:$('nama').value.trim(),price:priceText(),benefit:$('plus').value.trim(),style:s.label,tone:s.tone})});
+if(r.ok){const d=await r.json();if(Array.isArray(d.hooks)&&d.hooks.length)hooks=d.hooks}}catch(e){}
+if(!hooks){hooks=fallback();note='AI sedang tidak tersedia, jadi hook dibuat dari template.'}
+S.hooks=hooks;S.picked=0;S.loading=false;$('note').textContent=note;render();}
+$('nama').oninput=render;$('plus').oninput=()=>{};
+$('harga').oninput=e=>{const d=digits();e.target.value=d?priceText():''};
+$('go').onclick=generate;
+$('cp').onclick=()=>{if(S.hooks.length){copy(build(S.hooks[S.picked]));flash('p',$('cp'),'Salin prompt')}};
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const p=$('pv');p.src=r.result;p.classList.remove('hide');$('dt').textContent='Ketuk untuk ganti foto';$('ds').classList.add('hide')};r.readAsDataURL(f)};
+render();
+</script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))</script>
+</body>
+</html>
